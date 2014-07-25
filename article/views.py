@@ -6,5 +6,5 @@ from article.models import Article
 
 
 def home(request):
-    article = Article.objects.get(pk=2)
+    article = Article.objects.get(pk=1)
     return render_to_response('index.html',{'article':article}, context_instance=RequestContext(request))
