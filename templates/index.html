@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load bookmarks_tags %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="/static/bookmarks/js/bookmarks.js" type="text/javascript"></script>
+</head>
+<body>
+{% bookmark_form for article as form %} {# <-- note the 'as' argument #}
+
+{% if form %}
+    {% if user.is_authenticated %}
+        <form action="{% url 'bookmarks_bookmark' %}" method="post" accept-charset="UTF-8" class="bookmarks_form">
+            {% csrf_token %}
+            {{ form }}
+            {% with form.bookmark_exists as exists %}
+                {# another hidden input is created to handle javascript submit event #}
+                <input class="bookmarks_toggle" type="submit" value="add"{% if exists %}
+                       style="display: none;"{% endif %}/>
+                <input class="bookmarks_toggle" type="submit" value="remove"{% if not exists %}
+                       style="display: none;"{% endif %}/>
+            {% endwith %}
+            <span class="error" style="display: none;">Error during process</span>
+        </form>
+    {% else %}
+        Handle anonymous users.
+    {% endif %}
+{% endif %}
+</body>
+</html>
